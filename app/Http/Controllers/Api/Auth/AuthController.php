@@ -33,8 +33,28 @@ class AuthController extends Controller
         $data = $request->only('email', 'password');
         if (Auth::attempt(["email" => $data["email"], "password" => $data["password"]]) && Auth::user()->status != 0) {
             $user = Auth::user();
-            $user['token'] = $user->createToken('vendor_token')->plainTextToken;
-            $response_data = $this->removeNull($user);
+         
+            $array = array(
+                "id"=>"$user->id",
+                "name"=>$user->name,
+                "email"=>$user->email,
+                "phone"=>$user->phone,
+                "address"=>$user->address,
+                "city"=>$user->city,
+                "state"=>$user->state,
+                "zip"=>$user->zip,
+                "type"=>"$user->type",
+                "company"=>$user->company,
+                "owner"=>$user->owner,
+                "status"=>"$user->status",
+                "account_name"=>$user->account_name,
+                "account_number"=>$user->account_number,
+                "routing_number"=>$user->routing_number,
+                "token"=>$user->createToken('vendor_token')->plainTextToken,
+            );
+
+            $response_data = $this->removeNull($array);
+
 
             $response = [
                 'status' => '1',
